@@ -4,11 +4,6 @@ class MenuState extends Phaser.State
 
 	create()
     {
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-        this.scale.pageAlignHorizontally = true;
-        this.scale.pageAlignVertically = true;
-
         this.background = this.game.add.sprite(0, 0, 'background');
 
         this.arrow = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'arrow');
