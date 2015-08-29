@@ -1,13 +1,41 @@
 import RainbowText from '../objects/RainbowText';
 
-class PlayState extends Phaser.State
-{
-	create()
+class PlayState extends Phaser.State {
+    create()
     {
         this.background = this.game.add.sprite(0, 0, 'background');
 
-        this.chicken = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'chicken');
-        this.chicken.anchor.setTo(0.5, 0.5);
+        let animalData = [
+            {key: 'chicken', text: 'CHICKEN'},
+            {key: 'horse', text: 'HORSE'},
+            {key: 'pig', text: 'PIG'},
+            {key: 'sheep', text: 'SHEEP'}
+        ];
+
+        this.animals = this.game.add.group();
+
+        let self = this;
+        let animal;
+
+        animalData.forEach(function(element){
+            //create each animal and put it in the group
+            animal = self.animals.create(-1000, self.game.world.centerY, element.key);
+
+            //I'm saving everything that's not Phaser-related in a custom property
+            animal.customParams = {text: element.text};
+
+            //anchor point set to the center of the sprite
+            animal.anchor.setTo(0.5);
+
+            //enable input so we can touch it
+            animal.inputEnabled = true;
+            animal.input.pixelPerfectClick = true;
+            animal.events.onInputDown.add(self.animateAnimal, self);
+        });
+
+        //place current animal in the middle
+        this.currentAnimal = this.animals.next();
+        this.currentAnimal.position.set(this.game.world.centerX, this.game.world.centerY);
 
         // Arrows
         // left arrow
@@ -30,18 +58,36 @@ class PlayState extends Phaser.State
         this.rightArrow.inputEnabled = true;
         this.rightArrow.input.pixelPerfectClick = true;
         this.rightArrow.events.onInputDown.add(this.switchAnimal, this);
-	}
+    }
 
     update()
     {
-        this.chicken.angle += 0.5;
     }
 
-    switchAnimal()
+    switchAnimal(sprite, event)
     {
-        console.log('switch');
+        let newAnimal, endX;
+
+        if(sprite.customParams.direction > 0)
+        {
+            newAnimal = this.animals.next();
+            endX = 640 + this.currentAnimal.width/2;
+        }
+        else
+        {
+            newAnimal = this.animals.previous();
+            endX = -this.currentAnimal.width/2;
+        }
+
+        this.currentAnimal.x = endX;
+        newAnimal.x = this.game.world.centerX;
+        this.currentAnimal = newAnimal;
     }
 
+    animateAnimal()
+    {
+        console.log('animate');
+    }
 }
 
 export default PlayState;
