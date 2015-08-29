@@ -117,7 +117,7 @@ class PlayState extends Phaser.State {
     showText(animal)
     {
         if(!this.animalText) {
-            var style = {
+            let style = {
                 font: 'bold 30pt Arial',
                 fill: '#D0171B',
                 align: 'center'
