@@ -6,7 +6,7 @@ import PlayState    from './states/PlayState';
 class Game extends Phaser.Game {
 
 	constructor() {
-        super(640, 360, Phaser.AUTO, 'content', null);
+        super(640, 360, Phaser.AUTO);
 
         this.state.add('BootState', BootState, false);
         this.state.add('PreloadState', PreloadState, false);
